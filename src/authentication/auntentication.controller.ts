@@ -35,5 +35,5 @@ export class AuthenticationController {
         const user = request.user;
         user.password = undefined;
         return user;
-    }
+    }//
 }
