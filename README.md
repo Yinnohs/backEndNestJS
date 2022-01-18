@@ -71,3 +71,14 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+#đ
+## Running Port 5001
+ 
+ 
+## Using docker
+In order to use the database inside the backend, you need docker compose and docker.
+try to run in with docker-compose-up inside the backend directory
+
+## Alternative to docker
+change the infomation on database Module inside the database Folder.
