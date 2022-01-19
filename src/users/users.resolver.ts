@@ -1,10 +1,9 @@
-import { UseGuards } from '@nestjs/common';
+import { HttpCode, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query } from '@nestjs/graphql';
 import { Resolver } from '@nestjs/graphql';
-import { AuthenticationService } from 'src/authentication/authentication.service';
+import jwtAuthenticationGraphQlGuard from 'src/authentication/passport/jwt/jwt.authentication.graphql.guard ';
 import jwtAuthenticationGuard from 'src/authentication/passport/jwt/jwt.authentication.guard';
 import { SoftDeleteUserDto } from './dto/softDelete.user.dto';
-import { userCreateDto } from './dto/users-create.input';
 import { User } from './entities/users.entity';
 import { UsersService } from './users.service';
 
@@ -12,25 +11,27 @@ import { UsersService } from './users.service';
 export class UsersResolver {
     constructor(
         private userService: UsersService,
-        ) {}
+        ){}
 
-
+    @HttpCode(200)
+    @UseGuards(jwtAuthenticationGraphQlGuard)
     @Query(()=> [User], {name:"getAllUsers"})
-    //@UseGuards(jwtAuthenticationGuard)
-    findAll(){
-        return this.userService.findAllUsers();
+    async findAll(){
+        return await this.userService.findAllUsers();
         }
-    
+
+    @HttpCode(200)
+    @UseGuards(jwtAuthenticationGraphQlGuard)
     @Query(()=> User, {name:"getOneUserById"})
-    @UseGuards(jwtAuthenticationGuard)
-    findOneById(@Args("id") id:string){
-        return this.userService.findOneUser(id);
+    async findOneById(@Args("id") id:string){
+        return await this.userService.findOneUser(id);
     }
 
+    @HttpCode(200)
     @Mutation(()=> User, {name:"softDeleteUser"})
-    @UseGuards(jwtAuthenticationGuard)
-    delete(@Args("userToSoftDelete") userToSoftDelete: SoftDeleteUserDto){
-        return this.userService.softDeleteUser(userToSoftDelete.id);
+    @UseGuards(jwtAuthenticationGraphQlGuard)
+    async delete(@Args("userToSoftDelete") userToSoftDelete: SoftDeleteUserDto){
+        return await this.userService.softDeleteUser(userToSoftDelete.id);
     }
 
 }

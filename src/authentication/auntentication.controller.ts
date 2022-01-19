@@ -2,6 +2,7 @@ import { Controller, Get, HttpCode,Post, Req, Res, UseGuards} from '@nestjs/comm
 import { Response, } from 'express';
 import { AuthenticationService } from './authentication.service';
 import jwtAuthenticationGuard from './passport/jwt/jwt.authentication.guard';
+import { LocalStrategy } from './passport/local/local.strategy';
 import RequestWithUser from './requestWithUser';
 
 
@@ -11,9 +12,10 @@ export class AuthenticationController {
     constructor(public readonly authenticationService: AuthenticationService) {}
 
     @HttpCode(200)
+    @UseGuards(LocalStrategy)
     @Post("/log-in")
     async logIn(@Req() logInrequest: RequestWithUser, @Res() logInResponse: Response) {
-        const user = {username: logInrequest.body.username, password: logInrequest.body.password} ;
+        const user = logInrequest.body;
         const cookie = await this.authenticationService.getCookieWithJwtToken(user);
         logInResponse.setHeader('Set-Cookie', cookie);
         user.password = undefined;
@@ -35,5 +37,5 @@ export class AuthenticationController {
         const user = request.user;
         user.password = undefined;
         return user;
-    }//
+    }
 }

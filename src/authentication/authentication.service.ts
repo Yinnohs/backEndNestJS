@@ -7,7 +7,6 @@ import { User } from 'src/users/entities/users.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import TokenPayload from './passport/jwt/tokenPayload';
-import { bufferCount } from 'rxjs';
 import { LogInDto } from './dto/auth.login.dto';
 
 @Injectable()
@@ -68,7 +67,7 @@ export class AuthenticationService {
 
 
     private async verifyPassword(plainTextPassword: string, hashedPassword :string){
-        const isPasswordMatching = await bcrypt.compare(plainTextPassword, hashedPassword);
+        const isPasswordMatching = bcrypt.compareSync(plainTextPassword, hashedPassword);
         if(!isPasswordMatching){
             throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
         }

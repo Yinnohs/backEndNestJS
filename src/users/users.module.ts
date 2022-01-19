@@ -5,6 +5,7 @@ import { UsersResolver } from './users.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/users.entity';
 import { TaskModule } from 'src/task/task.module';
+import { AuthenticationModule } from 'src/authentication/authentication.module';
 
 @Module({
     imports:[TypeOrmModule.forFeature([User]), TaskModule],
